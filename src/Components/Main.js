@@ -1,6 +1,9 @@
 import React, { Component } from "react"
 import Title from './Title'
 import Photowall from './Photowall'
+import AddPhoto from './AddPhoto'
+// S6.L33.5.
+import { Route } from 'react-router-dom'
 
 // 5.
 // move the posts into the state object
@@ -23,6 +26,7 @@ import Photowall from './Photowall'
 class Main extends Component {
 // 4.
 // use state instead, to manage updates and changes to our post array
+  // A Lifecycle Method
   constructor(props) {
     super(props)
 // 13.
@@ -49,6 +53,7 @@ class Main extends Component {
       posts: []
     }
     this.removePhoto = this.removePhoto.bind(this)
+    console.log('constructor')
   }
 
 // 7.
@@ -68,32 +73,52 @@ class Main extends Component {
 // 15.
 // componentDidMount() is involked immediately after the component is being 
 // inserted into the DOM. Call the fetch function then set the state of the 
-// returned data to posts
+// returned data to posts.
+// If fetching data from a Database, make sure to fetch from componentDidMount
+  // A Lifecycle Method
   componentDidMount() {
     const data = SimulateFetchFromDatabase()
+    // here we know the previous state of posts is empty so we can just set the new state
+    // equal to the data we fetch from the web (ie. from SimulateFetchFromDatabase)
     this.setState({
       posts: data
     })
+    console.log('componentDidMount')
   }
 
   // involked before the component is inserted into the DOM, before the render()
   // method gets involked
+  // A Lifecycle Method
   componentWillMount() { }
 
   // involked whenever a component is re-rendered -- whenever we update the state
   // of our component to trigger a re-render
-  componentDidUpdate() { }
+  // A Lifecycle Method
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate: prevState', prevState.posts)
+    console.log('componentDidUpdate: state', this.state)
+  }
 
   render() {
+    console.log('render')
 // 6.
 // <Photowall posts={posts} /> becomes <Photowall posts={this.state.posts} />
 // 8.
 // Pass updated state down to all components (from Main to Photowall to Photo)
 //  - onRemovePhoto={this.removePhoto}
+// S6.L33.6.
+    // we will declare route components with
+      // - Homepage: path='/'
+      // - AddPhoto: path='/AddPhoto'
     return (
       <div>
-        <Title title={'Photowall'} />
-        <Photowall posts={this.state.posts} onRemovePhoto={this.removePhoto} />
+        <Route exact path='/' render={() => (
+          <div>
+            <Title title={'Photowall'} />
+            <Photowall posts={this.state.posts} onRemovePhoto={this.removePhoto} />
+          </div>
+        )}/>
+        <Route exact path='/AddPhoto' component={AddPhoto} />
       </div>
     )
   }

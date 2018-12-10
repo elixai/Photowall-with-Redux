@@ -1,6 +1,9 @@
 import React from 'react'
 // 9.
 import PropTypes from 'prop-types'
+// S6.L33.3.
+// Link will be used instead of an href
+import { Link } from 'react-router-dom'
 // 3.
 // using Stateless Functional Component instead so don't need 
 // to import the Component library
@@ -22,14 +25,20 @@ import Photo from './Photo'
 }*/
 
 // 2.
-// ...instead we can use Stateless Functional Components method
+// ...instead of the Class above, we can use a Stateless Functional Component 
 function Photowall(props) {
 // 8.a.
 // Pass updated state down to all components (from Main to Photowall to Photo)
 //  - onRemovePhoto={props.onRemovePhoto}
+// S6.L33.4.
+  // to link to the AddPhoto page using BrowserRouter 
+  //  - <Link className='addIcon' to='/AddPhoto'> </Link>
   return (
-    <div className='photoGrid'>
-      {props.posts.map((post, index) => <Photo key={index} post={post} onRemovePhoto={props.onRemovePhoto} />)}
+    <div>
+      <Link className='addIcon' to='/AddPhoto'> </Link>
+      <div className='photoGrid'>
+        {props.posts.map((post, index) => <Photo key={index} post={post} onRemovePhoto={props.onRemovePhoto} />)}
+      </div>
     </div>
   )
 }

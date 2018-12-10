@@ -9,7 +9,7 @@ class Photo extends Component {
     // constructor above replaces the below method
     //const post = this.props.post
     // 9. 
-    // If we used 'const post' instead of a 'constructor' button would be:
+    // If we used 'const post' instead of a 'constructor', button would be:
     /*  -   <button className='button remove-button' onClick={() => {
               props.onRemovePhoto(post)
             }}>Remove</button> */
