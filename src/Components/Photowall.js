@@ -33,11 +33,23 @@ function Photowall(props) {
 // S6.L33.4.
   // to link to the AddPhoto page using BrowserRouter 
   //  - <Link className='addIcon' to='/AddPhoto'> </Link>
+// S6.L40.4.
+  // before where we map over each photo we need to sort the array first. Sort
+  // it in descending order using sort(). Sort takes in an ES5 function with 2
+  // arguements, and will return a ruleset. We are sorting based on the id of 
+  // each element. To sort in descending order, take 2nd element minus the 1st.
   return (
     <div>
       <Link className='addIcon' to='/AddPhoto'> </Link>
       <div className='photoGrid'>
-        {props.posts.map((post, index) => <Photo key={index} post={post} onRemovePhoto={props.onRemovePhoto} />)}
+        {
+          //props.posts.map((post, index) => <Photo key={index} post={post} onRemovePhoto={props.onRemovePhoto} />)
+          props.posts
+          .sort(function(x, y) {
+            return y.id - x.id
+          })
+          .map((post, index) => <Photo key={post.id} post={post} onRemovePhoto={props.onRemovePhoto} />)
+        }
       </div>
     </div>
   )

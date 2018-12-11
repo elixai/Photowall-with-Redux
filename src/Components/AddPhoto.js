@@ -22,8 +22,10 @@ class AddPhoto extends Component {
     event.preventDefault()
     const imageLink = event.target.elements.link.value
     const description = event.target.elements.description.value
+// S6.L40.1.
+    // give the 'id' a value of the current date
     const post = {
-      id: 0,
+      id: Number(new Date()),
       description: description,
       imageLink: imageLink
     }
