@@ -53,20 +53,31 @@ class Main extends Component {
       posts: []
     }
     this.removePhoto = this.removePhoto.bind(this)
-    console.log('constructor')
+    //console.log('constructor')
   }
 
 // 7.
 // Updating State: using a method to remove a photo from the Photowall.
   // photo to be removed (postRemoved param) will be used to update our state
   removePhoto(postRemoved) {
-    console.log('postRemoved', postRemoved)
+    //console.log('postRemoved', postRemoved)
     // Inside of this.setState we pass in a function ('() => {object}') and that function will
     // return a new object. Need to pass in our current state as the first argument. We intend
     // to update/filter this state such that it removes the photo we clicked on. To do that we 
     // return a new list of posts
     this.setState((state) => ({
       posts: state.posts.filter(post => post !== postRemoved)
+    }))
+  }
+
+// S6.L39.3.
+// to update the state of posts, we want to update the Component state with the newly added
+// photo (postSubmitted). Simply return the updated posts, such that we are going to get the 
+// current state of the posts (state.posts) and add the post that was just submitted by the 
+// form (concat([postSubmitted])).
+  addPhoto(postSubmitted) {
+    this.setState((state) => ({
+      posts: state.posts.concat([postSubmitted])
     }))
   }
 
@@ -83,7 +94,7 @@ class Main extends Component {
     this.setState({
       posts: data
     })
-    console.log('componentDidMount')
+    //console.log('componentDidMount')
   }
 
   // involked before the component is inserted into the DOM, before the render()
@@ -95,12 +106,12 @@ class Main extends Component {
   // of our component to trigger a re-render
   // A Lifecycle Method
   componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate: prevState', prevState.posts)
-    console.log('componentDidUpdate: state', this.state)
+    //console.log('componentDidUpdate: prevState', prevState.posts)
+    //console.log('componentDidUpdate: state', this.state)
   }
 
   render() {
-    console.log('render')
+    //console.log('render')
 // 6.
 // <Photowall posts={posts} /> becomes <Photowall posts={this.state.posts} />
 // 8.
@@ -110,6 +121,21 @@ class Main extends Component {
     // we will declare route components with
       // - Homepage: path='/'
       // - AddPhoto: path='/AddPhoto'
+// S6.L39.5.
+    // need need to involk the addPhoto method inside of the AddPhoto Constructor by 
+    // passing it down as props using the render() method. The arrow function is going
+    // to return our addPhoto Component. We pass props down to our Component via 
+    // <AddPhoto onAddPhoto={() => {}} /> with an arrow function. When we access the prop,
+    // inside the AddPhoto Component, we want it to trigger an arrow function. It's set
+    // equal to an arrow function that will return a block of code. The arrow function will
+    // also take in, as an argument, the addedPost (which is passed in from our AddPhoto Component, 
+    // 'AddPhoto.js page) -- we pass it in by accessing the prop inside the event handler 
+    // (handleSubmit) as soon as we submit the form (ie. his.props.onAddPhoto(post)).
+// S6.L39.7.
+    // inside if the onAddPhoto arrow function we can involke the addPhoto method and pass in
+    // the post that was just submitted. By doing so we can update the state of our component
+    // to include the new post.
+      // - this.addPhoto(addedPost)
     return (
       <div>
         <Route exact path='/' render={() => (
@@ -118,7 +144,12 @@ class Main extends Component {
             <Photowall posts={this.state.posts} onRemovePhoto={this.removePhoto} />
           </div>
         )}/>
-        <Route exact path='/AddPhoto' component={AddPhoto} />
+        <Route path='/AddPhoto' render={({history}) => (
+          <AddPhoto onAddPhoto={(addedPost) => {
+            this.addPhoto(addedPost)
+            history.push('/')
+          }}/>
+        )}/>
       </div>
     )
   }
